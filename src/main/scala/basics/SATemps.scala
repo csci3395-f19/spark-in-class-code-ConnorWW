@@ -46,9 +46,13 @@ object SATemps {
     val rainyMaxTempAvg = (lstRainMaxTemps.foldRight[Double](0)((sum, temp ) => {sum + temp} )) / lstRainMaxTemps.length
     println("Average max temperature on 'rainy' days is: " + rainyMaxTempAvg)
 
-    val groupedMonths = data.groupBy(_.month).toArray
-    groupedMonths.foreach(()
-    
+    val groupedMonths:Array[(Int, Array[TempRow])] = data.groupBy(_.month).toArray
+    val monthMaxAvg:Array[(Int, Double)] = for((month, tempData) <- groupedMonths) yield {
+      val avg:Double = tempData.map(_.tmax).sum / tempData.length
+      println("For month " + month + "the average high was " + avg)
+      (month, avg)
+    }
+  
 
 
 	source.close()
