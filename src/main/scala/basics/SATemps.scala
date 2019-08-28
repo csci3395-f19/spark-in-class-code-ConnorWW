@@ -28,19 +28,27 @@ object SATemps {
   }
 
   def main(args: Array[String]): Unit = {
-	val source = scala.io.Source.fromFile("/users/mlewis/CSCI3395-F19/InClassBD/data/SanAntonioTemps.csv")
+  	val source = scala.io.Source.fromFile("/users/mlewis/CSCI3395-F19/InClassBD/data/SanAntonioTemps.csv")
 	
-	val lines = source.getLines()
-	val data = lines.drop(2).map(parseLine).toArray
-  val highestTempRow = data.maxBy(_.tmax)
-  println("Date of highest temperature: " + highestTempRow.month + "/" + highestTempRow.day + "/" + highestTempRow.year)
-  val highestRainRow = data.maxBy(_.precip)
-  println("Date of most precipitation: " + highestRainRow.month + "/" + highestRainRow.day + "/" + highestRainRow.year)
+  	val lines = source.getLines()
+    val data = lines.drop(2).map(parseLine).toArray
+  
+    val highestTempRow = data.maxBy(_.tmax)
+    println("Date of highest temperature: " + highestTempRow.month + "/" + highestTempRow.day + "/" + highestTempRow.year)
+  
+    val highestRainRow = data.maxBy(_.precip)
+    println("Date of most precipitation: " + highestRainRow.month + "/" + highestRainRow.day + "/" + highestRainRow.year)
 
-  val rowsWithRainOverOneInch = data.filter(_.precip >= 1.0)
-  println("Fraction of days with more than one inch of rain: " + rowsWithRainOverOneInch.length + " / " + data.length)
+    val rowsWithRainOverOneInch = data.filter(_.precip >= 1.0)
+    println("Fraction of days with more than one inch of rain: " + rowsWithRainOverOneInch.length + " / " + data.length)
 
-  val rainyTemp = rowsWithRainOverOneInch.fold(0)((accumulated:Double, row:TempRow) => accumulated + row2.tmax)(0). / rowsWithRainOverOneInch.length
+    val lstRainMaxTemps = rowsWithRainOverOneInch.map(_.tmax)
+    val rainyMaxTempAvg = (lstRainMaxTemps.foldRight[Double](0)((sum, temp ) => {sum + temp} )) / lstRainMaxTemps.length
+    println("Average max temperature on 'rainy' days is: " + rainyMaxTempAvg)
+
+    val groupedMonths = data.groupBy(_.month).toArray
+    groupedMonths.foreach(()
+    
 
 
 	source.close()
